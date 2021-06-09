@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class FileReceive implements Runnable {
@@ -124,6 +125,7 @@ public class FileReceive implements Runnable {
             }
         }
         running = false;
+        JOptionPane.showMessageDialog(null, "Image ready!","Message",JOptionPane.INFORMATION_MESSAGE);
         panel.loadImageDownloaded(userName);
 
     }

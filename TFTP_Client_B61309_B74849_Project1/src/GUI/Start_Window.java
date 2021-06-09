@@ -135,7 +135,7 @@ public class Start_Window extends JFrame implements ActionListener {
 
         if (obj == getFile) {
 
-            JOptionPane.showMessageDialog(this, "downloadin...% \nPleae wait.", "Message", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "downloading...% \nPleae wait.", "Message", JOptionPane.INFORMATION_MESSAGE);
 
             // 1. request for the image
             try {
