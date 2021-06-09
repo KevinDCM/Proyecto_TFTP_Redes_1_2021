@@ -140,7 +140,7 @@ public class ShowResult_Window extends JFrame implements ActionListener {
             System.out.println("sending end!");
         } catch (IOException ex) {
         }
-        this.fileSending.closeSocketConnection(); // probar cerrarlo para ver si se puede mandar mas de una img por sesión
+        //this.fileSending.closeSocketConnection(); // probar cerrarlo para ver si se puede mandar mas de una img por sesión
     }
 
     @Override

@@ -1,5 +1,6 @@
 package Client;
 
+import GUI.DrawPanel;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 public class FileReceive implements Runnable {
 
@@ -24,13 +26,16 @@ public class FileReceive implements Runnable {
     int size;
 
     private ArrayList<BufferedImage> images;
+    private BufferedImage image;
+    private DrawPanel panel;
 
-    public FileReceive(int portNumber, String userName, int size) throws SocketException {
+    public FileReceive(int portNumber, String userName, int size, DrawPanel drawPanel) throws SocketException {
         this.userName = userName;
         this.images = new ArrayList<>();
         port = portNumber;
         socket = new DatagramSocket(portNumber);
         this.size = size;
+        this.panel = drawPanel;
 
         System.out.println("size: " + size);
         // no esta ejecutadose el hilo cuando un client intenta enviar una segunda o tercera imagen por sesión
@@ -40,8 +45,8 @@ public class FileReceive implements Runnable {
     public void run() {
         running = true;
         int cont = 0;
-        
-        while (running) {
+
+        while (true) {
 
             try {
 
@@ -55,7 +60,6 @@ public class FileReceive implements Runnable {
                 System.out.println("packet received # : " + (++cont));
                 if (received.equals("end")) {
                     System.out.println(received);
-                    running = false;
                     break;
                 } else {
                     byteArrayToImage(packet.getData());
@@ -63,7 +67,7 @@ public class FileReceive implements Runnable {
 
             } catch (IOException ex) {
             }
-            
+
             try {
                 Thread.sleep(80);
             } catch (InterruptedException ex) {
@@ -73,17 +77,16 @@ public class FileReceive implements Runnable {
         }
 
         try {
-            imageMergeAndSave();
+            imageMerge();
         } catch (IOException ex) {
             Logger.getLogger(FileReceive.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //socket.close();
-        //socket.close();
 
+        socket.close();
     }
 
-    private void imageMergeAndSave() throws IOException {
-        
+    private void imageMerge() throws IOException {
+
         BufferedImage combined = new BufferedImage(
                 this.images.get(0).getWidth() * size,
                 this.images.get(0).getHeight() * size,
@@ -113,11 +116,16 @@ public class FileReceive implements Runnable {
             // Save as new image
             ImageIO.write(combined, "png", new File(path, fileName));
 
+            this.image = ImageIO.read(new File(path, fileName));
+
         } finally {
             if (g != null) {
                 g.dispose();
             }
         }
+        running = false;
+        panel.loadImageDownloaded(userName);
+
     }
 
     public void byteArrayToImage(byte[] data) throws IOException {
@@ -130,7 +138,6 @@ public class FileReceive implements Runnable {
         this.images.add(newBi);
 
         is.close();
-        
 
     }
 

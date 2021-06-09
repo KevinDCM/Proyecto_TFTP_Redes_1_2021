@@ -42,4 +42,20 @@ public class DrawPanel extends JPanel {
         return this.image;
     }
 
+    public void loadImageDownloaded(String user) throws IOException {
+        File folder = new File("./users/" + user);
+        String path = folder.getPath();
+        folder.mkdir();
+
+        String fileName = user + ".png";
+
+        this.image = ImageIO.read(new File(path, fileName));
+        this.setPreferredSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
+        this.icon.setBounds(0, 0, this.image.getWidth(), this.image.getHeight());
+        this.icon.setIcon(new ImageIcon(this.image));
+
+        this.repaint();
+
+    }
+
 }

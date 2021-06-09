@@ -1,11 +1,16 @@
 package GUI;
 
+import Client.FileReceive;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -121,7 +126,7 @@ public class Start_Window extends JFrame implements ActionListener {
             try {
                 w = new ShowResult_Window(this.drawPanel.getImage(), this.portNumber, this.userName);
                 w.setVisible(true);
-                this.dispose(); // cerrar esta si no se puede enviar mas de una imagen por sesión
+                this.dispose();
 
             } catch (IOException ex) {
                 Logger.getLogger(Start_Window.class.getName()).log(Level.SEVERE, null, ex);
@@ -130,10 +135,56 @@ public class Start_Window extends JFrame implements ActionListener {
 
         if (obj == getFile) {
 
-            JOptionPane.showMessageDialog(this, "This function is currently in maintenance! :( Try again later.", "Message", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "downloadin...% \nPleae wait.", "Message", JOptionPane.INFORMATION_MESSAGE);
+
+            // 1. request for the image
+            try {
+                String msj = "imgBack-" + this.portNumber + "-" + this.userName + "-zzz";
+                byte[] mensaje = msj.getBytes();
+
+                DatagramSocket socketUDP;
+                socketUDP = new DatagramSocket();
+
+                InetAddress host = InetAddress.getByName("localhost");
+
+                int porcion = mensaje.length;
+                DatagramPacket datagramPacket = new DatagramPacket(mensaje, porcion, host, 69);
+                socketUDP.send(datagramPacket);
+                //socketUDP.close();
+
+                System.out.println("size receiving");
+
+                // 2. start the receiving, with the corresponding  img size
+                int size = getSize(socketUDP);
+                System.out.println("size received for download:" + size);
+                FileReceive fR;
+                fR = new FileReceive(portNumber, userName, size, drawPanel);
+
+                Thread t = new Thread(fR);
+                t.start();
+
+
+            } catch (SocketException ex) {
+                Logger.getLogger(ShowResult_Window.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ShowResult_Window.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
 
+    }
+
+    public int getSize(DatagramSocket socketUDP) throws IOException {
+
+        byte[] buffer = new byte[1000];
+
+        DatagramPacket datagramPacketReceive = new DatagramPacket(buffer, buffer.length);
+
+        socketUDP.receive(datagramPacketReceive);
+
+        String peticionLlegada = new String(datagramPacketReceive.getData(), 0, datagramPacketReceive.getLength());
+
+        return Integer.parseInt(peticionLlegada);
     }
 
 }
