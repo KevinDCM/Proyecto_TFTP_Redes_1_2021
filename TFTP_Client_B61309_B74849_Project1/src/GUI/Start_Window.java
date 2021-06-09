@@ -46,7 +46,7 @@ public class Start_Window extends JFrame implements ActionListener {
             public void windowClosing(WindowEvent we) {
                 int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Message", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    System.exit(0);
+                    dispose();
                 }
             }
         });
@@ -121,6 +121,7 @@ public class Start_Window extends JFrame implements ActionListener {
             try {
                 w = new ShowResult_Window(this.drawPanel.getImage(), this.portNumber, this.userName);
                 w.setVisible(true);
+                this.dispose(); // cerrar esta si no se puede enviar mas de una imagen por sesión
 
             } catch (IOException ex) {
                 Logger.getLogger(Start_Window.class.getName()).log(Level.SEVERE, null, ex);

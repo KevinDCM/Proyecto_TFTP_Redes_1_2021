@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import Client.FileSending;
+import java.awt.Dimension;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -73,7 +74,7 @@ public class ShowResult_Window extends JFrame implements ActionListener {
                 BufferedImage croppedImage = this.image.getSubimage(i * subImageWidth, j * subImageHeight, subImageWidth, subImageHeight);
 
                 this.images[i][j] = new JLabel(new ImageIcon(croppedImage));
-                this.images[i][j].setBounds(i * (subImageWidth + 5) + 5, j * (subImageHeight + 5) + 5 + 100, croppedImage.getWidth(), croppedImage.getHeight());
+                this.images[i][j].setBounds(i * (subImageWidth + 5) + 5, j * (subImageHeight + 5) + 5 + 50, croppedImage.getWidth(), croppedImage.getHeight());
                 this.add(this.images[i][j]);
             }
         }
@@ -139,7 +140,7 @@ public class ShowResult_Window extends JFrame implements ActionListener {
             System.out.println("sending end!");
         } catch (IOException ex) {
         }
-        this.fileSending.closeSocketConnection();
+        this.fileSending.closeSocketConnection(); // probar cerrarlo para ver si se puede mandar mas de una img por sesión
     }
 
     @Override
@@ -177,7 +178,7 @@ public class ShowResult_Window extends JFrame implements ActionListener {
                 }
             }
 
-            File folder = new File("./" + userName);
+            File folder = new File("./users" + userName);
             String path = folder.getPath();
             folder.mkdir();
 

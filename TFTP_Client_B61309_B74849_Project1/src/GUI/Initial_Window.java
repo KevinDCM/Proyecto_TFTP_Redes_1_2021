@@ -49,7 +49,7 @@ public class Initial_Window extends JFrame implements ActionListener {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent we) {
-                int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to logout?", "Message", JOptionPane.YES_NO_OPTION);
+                int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Message", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     System.exit(0);
                 }
