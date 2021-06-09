@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-public class FileReceive extends Thread {
+public class FileReceive implements Runnable {
 
     DatagramSocket socket;
     boolean running;
@@ -32,6 +32,8 @@ public class FileReceive extends Thread {
         socket = new DatagramSocket(portNumber);
         this.size = size;
 
+        System.out.println("size: " + size);
+        // no esta ejecutadose el hilo cuando un client intenta enviar una segunda o tercera imagen por sesión
     }
 
     @Override
@@ -63,7 +65,7 @@ public class FileReceive extends Thread {
             }
             
             try {
-                sleep(80);
+                Thread.sleep(80);
             } catch (InterruptedException ex) {
                 Logger.getLogger(FileReceive.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -100,7 +102,7 @@ public class FileReceive extends Thread {
                 }
             }
 
-            File folder = new File("./" + userName);
+            File folder = new File("./users/" + userName);
             String path = folder.getPath();
             folder.mkdir();
 

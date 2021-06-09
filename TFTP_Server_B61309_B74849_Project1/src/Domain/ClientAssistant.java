@@ -8,14 +8,14 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.sql.SQLException;
 
-public class Client extends Thread {
+public class ClientAssistant extends Thread {
 
     private final DatagramPacket packet;
 
     private boolean mantenerConexion;
     private final DatagramSocket socketUDP;
 
-    public Client(DatagramPacket packet) throws SocketException {
+    public ClientAssistant(DatagramPacket packet) throws SocketException {
 
         this.packet = packet;
         this.mantenerConexion = true;
@@ -105,9 +105,18 @@ public class Client extends Thread {
                         this.mantenerConexion = false;
 
                         int port_num = Integer.parseInt(peticion2);
+
+                        System.out.println("11-send img request port:" + port_num);
+
+                        // Start the thread
                         FileReceive fR = new FileReceive(port_num, peticion3, Integer.parseInt(peticion4));
-                        fR.start();
-                    } 
+
+                        Thread t = new Thread(fR);
+                        t.start();
+                        System.out.println("22-send img request port:" + port_num);
+
+
+                    }
 
                 } // if general
 

@@ -1,12 +1,12 @@
 package Server;
 
-import Domain.Client;
+import Domain.ClientAssistant;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class Server extends Thread {
+public class Central_Server extends Thread {
 
-    public Server() {
+    public Central_Server() {
     }
 
     @Override
@@ -25,7 +25,7 @@ public class Server extends Thread {
                 socketUDP.receive(datagramPacketReceived);
                 System.out.println("request received!");
 
-                Client cliente = new Client(datagramPacketReceived);
+                ClientAssistant cliente = new ClientAssistant(datagramPacketReceived);
                 cliente.start();
 
                 Thread.sleep(100);

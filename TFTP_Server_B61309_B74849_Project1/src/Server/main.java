@@ -9,7 +9,7 @@ public class main {
 
         // administrar n-clientes, con un thread que pueda atender por separado a cada usuario
 
-        Server server = new Server();
+        Central_Server server = new Central_Server();
         server.start();
 
 //        FileReceive fR = new FileReceive(4445);
