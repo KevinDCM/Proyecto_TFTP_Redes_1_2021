@@ -178,7 +178,7 @@ public class ShowResult_Window extends JFrame implements ActionListener {
                 }
             }
 
-            File folder = new File("./users" + userName);
+            File folder = new File("./users/" + userName +"/");
             String path = folder.getPath();
             folder.mkdir();
 

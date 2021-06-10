@@ -121,12 +121,12 @@ public class Start_Window extends JFrame implements ActionListener {
         if (obj == saveInServer) {
 
             JOptionPane.showMessageDialog(this, "Loading ....%! Please wait...", "Message", JOptionPane.INFORMATION_MESSAGE);
-
+            this.dispose();
+            
             ShowResult_Window w;
             try {
                 w = new ShowResult_Window(this.drawPanel.getImage(), this.portNumber, this.userName);
                 w.setVisible(true);
-                this.dispose();
 
             } catch (IOException ex) {
                 Logger.getLogger(Start_Window.class.getName()).log(Level.SEVERE, null, ex);
@@ -152,11 +152,9 @@ public class Start_Window extends JFrame implements ActionListener {
                 socketUDP.send(datagramPacket);
                 //socketUDP.close();
 
-                System.out.println("size receiving");
 
                 // 2. start the receiving, with the corresponding  img size
                 int size = getSize(socketUDP);
-                System.out.println("size received for download:" + size);
                 FileReceive fR;
                 fR = new FileReceive(portNumber, userName, size, drawPanel);
 
